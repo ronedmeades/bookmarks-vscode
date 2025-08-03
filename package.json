@@ -2,7 +2,17 @@
   "name": "bookmarks",
   "displayName": "Bookmarks",
   "description": "Simple, transparent bookmark management for VS Code",
+  "author": "Ron Edmeades",
+  "publisher": "ronedmeades",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ronedmeades/bookmarks-vscode.git"
+  },
+  "homepage": "https://github.com/ronedmeades/bookmarks-vscode",
+  "bugs": {
+    "url": "https://github.com/ronedmeades/bookmarks-vscode/issues"
+  },
   "engines": {
     "vscode": "^1.102.0"
   },
