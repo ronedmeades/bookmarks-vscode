@@ -22,12 +22,46 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "bookmarks-container",
+          "title": "Bookmarks",
+          "icon": "$(bookmark)"
+        }
+      ]
+    },
+    "views": {
+      "bookmarks-container": [
+        {
+          "id": "bookmarksList",
+          "name": "Bookmarks",
+          "icon": "$(bookmark)"
+        }
+      ]
+    },
     "commands": [
       {
-        "command": "bookmarks.helloWorld",
-        "title": "Hello World"
+        "command": "bookmarks.add",
+        "title": "Add Bookmark"
+      },
+      {
+        "command": "bookmarks.remove", 
+        "title": "Remove Bookmark"
       }
-    ]
+    ],
+    "menus": {
+      "editor/lineNumber/context": [
+        {
+          "command": "bookmarks.add",
+          "group": "inline"
+        },
+        {
+          "command": "bookmarks.remove",
+          "group": "inline"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
