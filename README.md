@@ -1,71 +1,108 @@
-# bookmarks README
+# Bookmarks README
 
-This is the README for your extension "bookmarks". After writing up a brief description, we recommend including the following sections.
+A simple, transparent bookmark management extension for VS Code that replicates Visual Studio's bookmark 
+functionality. Navigate through your code with ease using persistent bookmarks that work across files and sessions.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+### Visual Studio-Style Bookmark Management
+- **Gutter Integration**: Right-click in the gutter (line number area) to add or remove bookmarks, just like breakpoints
+- **Context-Sensitive Menus**: Shows "Add Bookmark" when no bookmark exists, "Remove Bookmark" when one does
+- **Visual Indicators**: Clean bookmark icons appear in the gutter next to bookmarked lines
 
-For example if there is an image subfolder under your extension project workspace:
+### Smart Navigation
+- **Tree View Panel**: Dedicated bookmarks panel in the activity bar showing all bookmarks organized by file
+- **One-Click Navigation**: Click any bookmark in the tree view to instantly jump to that location
+- **Cross-File Support**: Bookmarks work seamlessly across multiple files in your workspace
 
-\!\[feature X\]\(images/feature-x.png\)
+### Customizable Labels
+- **Optional Labels**: Add descriptive labels to your bookmarks for better organization
+- **Easy Editing**: Hover over any bookmark in the tree view and click the edit icon to modify labels
+- **Clean Workflow**: Create bookmarks instantly, add labels later when needed
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+### Robust Persistence
+- **Session Survival**: Bookmarks persist across VS Code restarts
+- **Workspace-Scoped**: Bookmarks are saved per workspace/project
+- **File Switching**: Bookmark icons automatically appear when switching between files
+
+### Theme Integration
+- **Adaptive Icons**: Bookmark icons automatically adapt to light and dark themes
+- **Clean Design**: Minimal visual clutter - no unnecessary overview ruler marks
+- **Professional Appearance**: Icons match VS Code's native design language
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+No additional requirements or dependencies needed. This extension works with VS Code 1.102.0 and above.
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+This extension does not contribute any VS Code settings. It works out of the box with sensible defaults.
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+- None currently known. This extension has been thoroughly tested across multiple files and use cases.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.0.1
 
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+Initial release featuring:
+- Gutter-based bookmark management with right-click context menus
+- Visual bookmark icons with theme adaptation
+- Tree view navigation panel
+- Label editing capability
+- Cross-file bookmark support
+- Persistent storage across sessions
+- Context-sensitive "Add" vs "Remove" menu items
 
 ---
 
-## Following extension guidelines
+## Architecture & Transparency
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+This extension was built with transparency and auditability in mind:
+
+- **Open Source**: Complete source code available for review
+- **Clean Architecture**: Well-structured TypeScript code following VS Code best practices  
+- **Modern APIs**: Uses latest VS Code extension APIs for robust functionality
+- **No Telemetry**: No data collection or external dependencies
+
+## Usage
+
+1. **Adding Bookmarks**: Right-click in the gutter next to any line number and select "Add Bookmark"
+2. **Removing Bookmarks**: Right-click in the gutter next to a bookmarked line and select "Remove Bookmark"  
+3. **Navigation**: Click the bookmark icon in the activity bar to open the bookmarks panel, then click any bookmark to jump to it
+4. **Adding Labels**: In the bookmarks panel, hover over any bookmark and click the edit icon to add or modify labels
+
+## Following Extension Guidelines
+
+This extension follows VS Code's extension guidelines and best practices:
 
 * [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
 
-## Working with Markdown
+## Development
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+Built using:
+- TypeScript for type safety and maintainability
+- VS Code Extension API for native integration
+- Modern ES6+ features for clean, readable code
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+## Contributing
 
-## For more information
+Found a bug or have a feature request? Please open an issue on our [GitHub repository](https://github.com/ronedmeades/bookmarks-vscode).
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+## Author
 
-**Enjoy!**
+**Ron Edmeades**
+GitHub: [@ronedmeades](https://github.com/ronedmeades)
+
+## License
+
+This extension is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Source Code
+
+The complete source code is available on GitHub for review and contribution:
+[https://github.com/ronedmeades/function-navigator](https://github.com/ronedmeades/bookmarks-vscode)
+
+
+**Enjoy**
