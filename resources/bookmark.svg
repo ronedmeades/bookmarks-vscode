@@ -1,3 +1,6 @@
 <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3 2h10v12l-5-3-5 3V2z" fill="#007ACC" stroke="#ffffff" stroke-width="0.5"/>
+    <path d="M3 2h10v12l-5-3-5 3V2z" 
+          fill="var(--vscode-editor-background, #ffffff)" 
+          stroke="var(--vscode-editor-foreground, #000000)" 
+          stroke-width="1"/>
 </svg>

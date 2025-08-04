@@ -6,24 +6,19 @@ export function activate(context: vscode.ExtensionContext) {
 
     const bookmarkProvider = new BookmarkProvider(context);
 
-    // Register the tree data provider
     vscode.window.registerTreeDataProvider('bookmarksList', bookmarkProvider);
     
-    // Load existing bookmarks
     bookmarkProvider.loadBookmarks();
 
-    // Listen for active editor changes
     vscode.window.onDidChangeActiveTextEditor(() => {
         bookmarkProvider.updateDecorations();
         bookmarkProvider.updateBookmarkContext();
     });
 
-    // Listen for cursor position changes (optional - for more responsive context)
     vscode.window.onDidChangeTextEditorSelection(() => {
         bookmarkProvider.updateBookmarkContext(); // Add this
     });
 
-    // Add bookmark command
 	const addBookmarkCommand = vscode.commands.registerCommand('bookmarks.add', async (context?: {lineNumber: number, uri: vscode.Uri}) => {
 		const editor = vscode.window.activeTextEditor;
 		if (!editor) {
@@ -33,7 +28,6 @@ export function activate(context: vscode.ExtensionContext) {
 		
 		const lineNumber = context?.lineNumber ? context.lineNumber - 1 : editor.selection.active.line;
 		
-		// Check if bookmark already exists
 		const fileKey = editor.document.uri.toString();
 		const fileBookmarks = bookmarkProvider.getBookmarks(fileKey) || [];
 		const existingBookmark = fileBookmarks.find(b => b.line === lineNumber);
@@ -45,13 +39,11 @@ export function activate(context: vscode.ExtensionContext) {
 		
 		bookmarkProvider.addBookmark(editor.document.uri, lineNumber);
 
-        // Update context for the line we just modified
         bookmarkProvider.updateContextForClickedLine(lineNumber, editor.document.uri);
 
 		vscode.window.showInformationMessage('Bookmark added');
 	});
 
-	// Remove bookmark command  
 	const removeBookmarkCommand = vscode.commands.registerCommand('bookmarks.remove', async (context?: {lineNumber: number, uri: vscode.Uri}) => {
 		const editor = vscode.window.activeTextEditor;
 		if (!editor) {
@@ -63,7 +55,6 @@ export function activate(context: vscode.ExtensionContext) {
 		
 		const wasRemoved = bookmarkProvider.removeBookmark(editor.document.uri, lineNumber);
 
-        // Update context for the line we just modified
         bookmarkProvider.updateContextForClickedLine(lineNumber, editor.document.uri);
 		
 		if (wasRemoved) {
@@ -73,13 +64,11 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-    // Edit bookmark label command
     const editLabelCommand = vscode.commands.registerCommand('bookmarks.editLabel', async (bookmarkItem: BookmarkItem) => {
         if (!bookmarkItem || bookmarkItem.type !== 'bookmark') {
             return;
         }
         
-        // Get current label
         const fileKey = bookmarkItem.fileUri!.toString();
         const fileBookmarks = bookmarkProvider.getBookmarks(fileKey) || [];
         const bookmark = fileBookmarks.find(b => b.line === bookmarkItem.line);
@@ -88,19 +77,16 @@ export function activate(context: vscode.ExtensionContext) {
             return;
         }
         
-        // Show input box with current label
         const newLabel = await vscode.window.showInputBox({
             prompt: 'Enter bookmark label',
             value: bookmark.label || '',
             placeHolder: 'Optional label for this bookmark'
         });
         
-        // If user cancelled, do nothing
         if (newLabel === undefined) {
             return;
         }
         
-        // Update the bookmark label
         bookmarkProvider.updateBookmarkLabel(bookmarkItem.fileUri!, bookmarkItem.line!, newLabel || undefined);
         vscode.window.showInformationMessage('Bookmark label updated');
     });
@@ -124,16 +110,11 @@ class BookmarkProvider implements vscode.TreeDataProvider<BookmarkItem> {
     constructor(context: vscode.ExtensionContext) {
         this.context = context;
 
-        // Debug: Check if file exists
         const iconPath = path.join(this.context.extensionPath, 'resources', 'bookmark.svg');
-        console.log('Looking for bookmark icon at:', iconPath);
         
-        // Create the decoration type
         this.bookmarkDecoration = vscode.window.createTextEditorDecorationType({
             gutterIconPath: vscode.Uri.file(path.join(this.context.extensionPath, 'resources', 'bookmark.svg')),
             gutterIconSize: 'contain',
-            // overviewRulerColor: 'blue',
-            // overviewRulerLane: vscode.OverviewRulerLane.Left
         });
 
         this.updateBookmarkContext();
@@ -149,48 +130,14 @@ class BookmarkProvider implements vscode.TreeDataProvider<BookmarkItem> {
         this.refresh();
 		this.updateDecorations();
         this.updateBookmarkContext();
-		// To forcefully clear the bookmarks files!
-		// this.bookmarks = new Map();
-		// this.context.workspaceState.update('bookmarks', {});
-		// this.refresh();
-		// console.log('Bookmarks forcibly cleared');
-		// this.refresh();
     }
 
     updateContextForClickedLine(lineNumber: number, fileUri: vscode.Uri): void {
         const fileKey = fileUri.toString();
         const fileBookmarks = this.bookmarks.get(fileKey) || [];
         const hasBookmark = fileBookmarks.some(b => b.line === lineNumber);
-        
-        console.log(`updateContextForClickedLine: Line ${lineNumber}, Has bookmark: ${hasBookmark}`);
         vscode.commands.executeCommand('setContext', 'bookmarks.hasBookmarkAtCurrentLine', hasBookmark);
     }
-
-    // updateContextForLine(lineNumber: number, fileUri: vscode.Uri): void {
-    //     const fileKey = fileUri.toString();
-    //     const fileBookmarks = this.bookmarks.get(fileKey) || [];
-    //     const hasBookmark = fileBookmarks.some(b => b.line === lineNumber);
-        
-    //     // Set context variable for menu visibility
-    //     vscode.commands.executeCommand('setContext', 'bookmarks.lineHasBookmark', hasBookmark);
-    // }
-
-    // updateBookmarkContext(): void {
-    //     const editor = vscode.window.activeTextEditor;
-    //     if (!editor) {
-    //         vscode.commands.executeCommand('setContext', 'bookmarks.hasBookmarkAtCurrentLine', false);
-    //         return;
-    //     }
-
-    //     const fileKey = editor.document.uri.toString();
-    //     const fileBookmarks = this.bookmarks.get(fileKey) || [];
-        
-    //     // Create a set of bookmarked line numbers for fast lookup
-    //     const bookmarkedLines = new Set(fileBookmarks.map(b => b.line + 1)); // Convert to 1-based
-        
-    //     // Set context that can be used in when clauses
-    //     vscode.commands.executeCommand('setContext', 'bookmarks.bookmarkedLines', Array.from(bookmarkedLines));
-    // }
 
     updateBookmarkContext(): void {
         const editor = vscode.window.activeTextEditor;
@@ -203,7 +150,6 @@ class BookmarkProvider implements vscode.TreeDataProvider<BookmarkItem> {
         const fileBookmarks = this.bookmarks.get(fileKey) || [];
         const currentLine = editor.selection.active.line; // 0-based cursor position
         
-        // Create array of 1-based line numbers (to match editorLineNumber)
         const bookmarkedLines = fileBookmarks.map(b => b.line + 1);
         vscode.commands.executeCommand('setContext', 'bookmarks.lines', bookmarkedLines);
     }
@@ -253,21 +199,15 @@ class BookmarkProvider implements vscode.TreeDataProvider<BookmarkItem> {
 	}
 
 	updateDecorations(): void {
-		// Update decorations for all visible editors
-        console.log('updateDecorations called');
 		vscode.window.visibleTextEditors.forEach(editor => {
 			const fileKey = editor.document.uri.toString();
 			const fileBookmarks = this.bookmarks.get(fileKey) || [];
 
-            console.log(`File: ${fileKey}, Bookmarks: ${fileBookmarks.length}`);
-			
 			const decorationRanges = fileBookmarks.map(bookmark => {
-                console.log(`Creating decoration for line ${bookmark.line}`);
                 return new vscode.Range(bookmark.line, 0, bookmark.line, 0);
             });
 			
 			editor.setDecorations(this.bookmarkDecoration, decorationRanges);
-            console.log(`Applied ${decorationRanges.length} decorations`);
 		});
 	}
 
@@ -293,7 +233,6 @@ class BookmarkProvider implements vscode.TreeDataProvider<BookmarkItem> {
             const item = new vscode.TreeItem(element.label, vscode.TreeItemCollapsibleState.None);
             item.iconPath = new vscode.ThemeIcon('bookmark');
             
-            // Command to navigate to bookmark
             item.command = {
                 command: 'vscode.open',
                 title: 'Go to Bookmark',
@@ -310,7 +249,6 @@ class BookmarkProvider implements vscode.TreeDataProvider<BookmarkItem> {
 
     async getChildren(element?: BookmarkItem): Promise<BookmarkItem[]> {
         if (!element) {
-            // Root level - return file groups
             const fileItems: BookmarkItem[] = [];
             
             for (const [fileUriString, bookmarks] of this.bookmarks) {
@@ -329,7 +267,6 @@ class BookmarkProvider implements vscode.TreeDataProvider<BookmarkItem> {
             
             return fileItems;
         } else if (element.type === 'file') {
-            // File level - return bookmarks for this file
             const bookmarkItems: BookmarkItem[] = [];
             
             for (const bookmark of element.bookmarks || []) {
