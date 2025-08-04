@@ -48,16 +48,30 @@
       {
         "command": "bookmarks.remove", 
         "title": "Remove Bookmark"
+      },
+      {
+        "command": "bookmarks.editLabel",
+        "title": "Edit",
+        "icon": "$(edit)"
       }
     ],
     "menus": {
       "editor/lineNumber/context": [
         {
           "command": "bookmarks.add",
+          "when": "editorLineNumber not in bookmarks.lines",
           "group": "inline"
         },
         {
           "command": "bookmarks.remove",
+          "when": "editorLineNumber in bookmarks.lines",
+          "group": "inline"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "bookmarks.editLabel",
+          "when": "view == bookmarksList && viewItem == bookmark",
           "group": "inline"
         }
       ]
