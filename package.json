@@ -4,6 +4,7 @@
   "description": "Simple, transparent bookmark management for VS Code",
   "author": "Ron Edmeades",
   "publisher": "ronedmeades",
+  "icon": "icon.png",
   "version": "0.0.1",
   "repository": {
     "type": "git",
