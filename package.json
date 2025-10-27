@@ -20,6 +20,14 @@
   "categories": [
     "Other"
   ],
+  "keywords": [
+    "bookmarks",
+    "navigation",
+    "code navigation",
+    "gutter",
+    "visual studio",
+    "productivity"
+  ],
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
